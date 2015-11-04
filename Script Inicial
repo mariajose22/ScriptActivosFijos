@@ -1,0 +1,820 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.4.4
+-- Dumped by pg_dump version 9.4.4
+-- Started on 2015-09-19 23:35:54
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 185 (class 3079 OID 11855)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2095 (class 0 OID 0)
+-- Dependencies: 185
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 172 (class 1259 OID 16394)
+-- Name: activo; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE activo (
+    idactivo character varying(50) NOT NULL,
+    idubicacion integer,
+    idrubro character varying(50),
+    descripcionactivo character varying(100),
+    fechaingres date,
+    estadogeneral character varying(50),
+    nombreactivo character varying(50)
+);
+
+
+ALTER TABLE activo OWNER TO postgres;
+
+--
+-- TOC entry 173 (class 1259 OID 16397)
+-- Name: catalogoactivosdanado; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE catalogoactivosdanado (
+    idcatalogdanado integer NOT NULL,
+    idsolicitud integer,
+    responsabledanio character varying(50),
+    descripciondanio character varying(50),
+    responsablereparar character varying(50),
+    estadoasignacionrresponsable character varying(20)
+);
+
+
+ALTER TABLE catalogoactivosdanado OWNER TO postgres;
+
+--
+-- TOC entry 174 (class 1259 OID 16400)
+-- Name: catalogoactivosdanado_idcatalogdanado_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE catalogoactivosdanado_idcatalogdanado_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE catalogoactivosdanado_idcatalogdanado_seq OWNER TO postgres;
+
+--
+-- TOC entry 2096 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: catalogoactivosdanado_idcatalogdanado_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE catalogoactivosdanado_idcatalogdanado_seq OWNED BY catalogoactivosdanado.idcatalogdanado;
+
+
+--
+-- TOC entry 175 (class 1259 OID 16402)
+-- Name: historialreparacion; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE historialreparacion (
+    idhistorial integer NOT NULL,
+    idsolicitud integer,
+    ubicacionanterioractivo character varying(50),
+    ubicacionactualactivo character varying(50),
+    fechafinreparacion date
+);
+
+
+ALTER TABLE historialreparacion OWNER TO postgres;
+
+--
+-- TOC entry 176 (class 1259 OID 16405)
+-- Name: historialreparacion_idhistorial_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE historialreparacion_idhistorial_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE historialreparacion_idhistorial_seq OWNER TO postgres;
+
+--
+-- TOC entry 2097 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: historialreparacion_idhistorial_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE historialreparacion_idhistorial_seq OWNED BY historialreparacion.idhistorial;
+
+
+--
+-- TOC entry 177 (class 1259 OID 16407)
+-- Name: registrodeactivobaja; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE registrodeactivobaja (
+    idbaja integer NOT NULL,
+    idsolicitud integer,
+    causabaja character varying(50),
+    fechabaja date
+);
+
+
+ALTER TABLE registrodeactivobaja OWNER TO postgres;
+
+--
+-- TOC entry 178 (class 1259 OID 16410)
+-- Name: registrodeactivobaja_idbaja_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE registrodeactivobaja_idbaja_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE registrodeactivobaja_idbaja_seq OWNER TO postgres;
+
+--
+-- TOC entry 2098 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: registrodeactivobaja_idbaja_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE registrodeactivobaja_idbaja_seq OWNED BY registrodeactivobaja.idbaja;
+
+
+--
+-- TOC entry 179 (class 1259 OID 16412)
+-- Name: rubro; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE rubro (
+    idrubro character varying(50) NOT NULL,
+    idactivo character varying(50),
+    nombrerubro character varying(50),
+    descripcionrubro character varying(100)
+);
+
+
+ALTER TABLE rubro OWNER TO postgres;
+
+--
+-- TOC entry 180 (class 1259 OID 16415)
+-- Name: solicitud; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE solicitud (
+    idsolicitud integer NOT NULL,
+    idusuario integer,
+    idactivo character varying(50),
+    idbaja integer,
+    fecharegistrasoli date NOT NULL,
+    estadosolicitud character varying(50),
+    descripcionsolicitud character varying(100),
+    cantidadsolicitada integer,
+    tiposolicitud character varying(50)
+);
+
+
+ALTER TABLE solicitud OWNER TO postgres;
+
+--
+-- TOC entry 181 (class 1259 OID 16418)
+-- Name: solicitud_idsolicitud_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE solicitud_idsolicitud_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE solicitud_idsolicitud_seq OWNER TO postgres;
+
+--
+-- TOC entry 2099 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: solicitud_idsolicitud_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE solicitud_idsolicitud_seq OWNED BY solicitud.idsolicitud;
+
+
+--
+-- TOC entry 182 (class 1259 OID 16420)
+-- Name: ubicacion; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE ubicacion (
+    idubicacion integer NOT NULL,
+    idactivo character varying(50),
+    nombrelugar character varying(50)
+);
+
+
+ALTER TABLE ubicacion OWNER TO postgres;
+
+--
+-- TOC entry 183 (class 1259 OID 16423)
+-- Name: ubicacion_idubicacion_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE ubicacion_idubicacion_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE ubicacion_idubicacion_seq OWNER TO postgres;
+
+--
+-- TOC entry 2100 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: ubicacion_idubicacion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE ubicacion_idubicacion_seq OWNED BY ubicacion.idubicacion;
+
+
+--
+-- TOC entry 184 (class 1259 OID 16425)
+-- Name: usuario; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE usuario (
+    idusuario integer NOT NULL,
+    nombreusuario character varying(50) NOT NULL,
+    claveusuario character varying(50) NOT NULL
+);
+
+
+ALTER TABLE usuario OWNER TO postgres;
+
+--
+-- TOC entry 1917 (class 2604 OID 16428)
+-- Name: idcatalogdanado; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY catalogoactivosdanado ALTER COLUMN idcatalogdanado SET DEFAULT nextval('catalogoactivosdanado_idcatalogdanado_seq'::regclass);
+
+
+--
+-- TOC entry 1918 (class 2604 OID 16429)
+-- Name: idhistorial; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY historialreparacion ALTER COLUMN idhistorial SET DEFAULT nextval('historialreparacion_idhistorial_seq'::regclass);
+
+
+--
+-- TOC entry 1919 (class 2604 OID 16430)
+-- Name: idbaja; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY registrodeactivobaja ALTER COLUMN idbaja SET DEFAULT nextval('registrodeactivobaja_idbaja_seq'::regclass);
+
+
+--
+-- TOC entry 1920 (class 2604 OID 16431)
+-- Name: idsolicitud; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY solicitud ALTER COLUMN idsolicitud SET DEFAULT nextval('solicitud_idsolicitud_seq'::regclass);
+
+
+--
+-- TOC entry 1921 (class 2604 OID 16432)
+-- Name: idubicacion; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY ubicacion ALTER COLUMN idubicacion SET DEFAULT nextval('ubicacion_idubicacion_seq'::regclass);
+
+
+--
+-- TOC entry 2075 (class 0 OID 16394)
+-- Dependencies: 172
+-- Data for Name: activo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY activo (idactivo, idubicacion, idrubro, descripcionactivo, fechaingres, estadogeneral, nombreactivo) FROM stdin;
+CSAR02A001	1	CSAR02	ASDASD	2014-03-03	S	DFDS
+CSAR01A002	2	CSAR01	ASDASD	2016-04-04	SDA	Q2EW
+CSAR03A001	24	CSAR03	asdasdas	2015-08-14	DISPONIBLE	escritorio
+CSAR04A001	26	CSAR04	Computadora I5 4 GENERACION Marca Dell	2015-08-15	DISPONIBLE	Computadora
+CSAR01A001	1	CSAR01	ASDAS	2025-06-08	ASDAD	ACTIVO\r
+CSAR03A003	24	CSAR03	LAMPARA PARA ESCRITORIO	2015-09-19	DISPONIBLE	LAMPARA 
+CSAR05A001	7	CSAR05	Balon NIke	2015-09-19	DISPONIBLE	Balon
+CSAR03A002	24	CSAR03	escritorio para directora, color cafe 	2015-09-19	DISPONIBLE	Escritorio
+CSAR01A003	7	CSAR01	MAPA MUNDI MADERA	2015-09-19	DISPONIBLE	GLOBO TERRAQUEO
+\.
+
+
+--
+-- TOC entry 2076 (class 0 OID 16397)
+-- Dependencies: 173
+-- Data for Name: catalogoactivosdanado; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY catalogoactivosdanado (idcatalogdanado, idsolicitud, responsabledanio, descripciondanio, responsablereparar, estadoasignacionrresponsable) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2101 (class 0 OID 0)
+-- Dependencies: 174
+-- Name: catalogoactivosdanado_idcatalogdanado_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('catalogoactivosdanado_idcatalogdanado_seq', 1, false);
+
+
+--
+-- TOC entry 2078 (class 0 OID 16402)
+-- Dependencies: 175
+-- Data for Name: historialreparacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY historialreparacion (idhistorial, idsolicitud, ubicacionanterioractivo, ubicacionactualactivo, fechafinreparacion) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2102 (class 0 OID 0)
+-- Dependencies: 176
+-- Name: historialreparacion_idhistorial_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('historialreparacion_idhistorial_seq', 1, false);
+
+
+--
+-- TOC entry 2080 (class 0 OID 16407)
+-- Dependencies: 177
+-- Data for Name: registrodeactivobaja; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY registrodeactivobaja (idbaja, idsolicitud, causabaja, fechabaja) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2103 (class 0 OID 0)
+-- Dependencies: 178
+-- Name: registrodeactivobaja_idbaja_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('registrodeactivobaja_idbaja_seq', 1, false);
+
+
+--
+-- TOC entry 2082 (class 0 OID 16412)
+-- Dependencies: 179
+-- Data for Name: rubro; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY rubro (idrubro, idactivo, nombrerubro, descripcionrubro) FROM stdin;
+CSAR01	\N	DIDACTICO	Todo materia/activo de uso de los estudiantes y docentes que faciliten la enseÃ±anza
+CSAR02	\N	BANDA DE PAZ	Instrumentos de la Banda de Paz
+CSAR04	\N	INFORMATICA	Para uso de alumnos,docentes y administrativos en materia de informatica y tecnologia
+CSAR03	\N	ADMINISTRATIVO	Todo material/activo que usa el personal administrativo
+CSAR05	\N	DEPORTIVO	Todo material/activo  para usos deportivos
+\.
+
+
+--
+-- TOC entry 2083 (class 0 OID 16415)
+-- Dependencies: 180
+-- Data for Name: solicitud; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY solicitud (idsolicitud, idusuario, idactivo, idbaja, fecharegistrasoli, estadosolicitud, descripcionsolicitud, cantidadsolicitada, tiposolicitud) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2104 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: solicitud_idsolicitud_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('solicitud_idsolicitud_seq', 1, false);
+
+
+--
+-- TOC entry 2085 (class 0 OID 16420)
+-- Dependencies: 182
+-- Data for Name: ubicacion; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY ubicacion (idubicacion, idactivo, nombrelugar) FROM stdin;
+1	\N	Kinder 5 "A"
+2	\N	Kinder 5 "B"
+3	\N	Preparatoria "A"
+4	\N	Preparatoria "B"
+5	\N	Primero "A"
+6	\N	Primero "B"
+7	\N	Segundo "A"
+8	\N	Segundo "B"
+9	\N	Tercero "A"
+10	\N	Tercero "B"
+11	\N	Cuanto "A"
+12	\N	Cuarto "B"
+13	\N	Quinto "A"
+14	\N	Quinto "B"
+15	\N	Sexto "A"
+16	\N	Sexto "B"
+17	\N	Septimo "A"
+18	\N	Septimo "B"
+19	\N	Octavo "A"
+20	\N	Octavo "B"
+21	\N	Noveno "A"
+22	\N	Noveno "B"
+24	\N	Direccion Principal
+25	\N	Bodega 2 (Segunda Planta)
+23	\N	Bodega 1 (Primera Planta)
+26	\N	Centro de CÃ³mputo
+\.
+
+
+--
+-- TOC entry 2105 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: ubicacion_idubicacion_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('ubicacion_idubicacion_seq', 2, true);
+
+
+--
+-- TOC entry 2087 (class 0 OID 16425)
+-- Dependencies: 184
+-- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY usuario (idusuario, nombreusuario, claveusuario) FROM stdin;
+1	admin	12345
+2	directora	12345
+3	docente	12345
+4	administrativo	12345
+\.
+
+
+--
+-- TOC entry 1925 (class 2606 OID 16434)
+-- Name: pk_activo; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY activo
+    ADD CONSTRAINT pk_activo PRIMARY KEY (idactivo);
+
+
+--
+-- TOC entry 1929 (class 2606 OID 16436)
+-- Name: pk_catalogoactivosdanado; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY catalogoactivosdanado
+    ADD CONSTRAINT pk_catalogoactivosdanado PRIMARY KEY (idcatalogdanado);
+
+
+--
+-- TOC entry 1933 (class 2606 OID 16438)
+-- Name: pk_historialreparacion; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY historialreparacion
+    ADD CONSTRAINT pk_historialreparacion PRIMARY KEY (idhistorial);
+
+
+--
+-- TOC entry 1936 (class 2606 OID 16440)
+-- Name: pk_registrodeactivobaja; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY registrodeactivobaja
+    ADD CONSTRAINT pk_registrodeactivobaja PRIMARY KEY (idbaja);
+
+
+--
+-- TOC entry 1941 (class 2606 OID 16442)
+-- Name: pk_rubro; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY rubro
+    ADD CONSTRAINT pk_rubro PRIMARY KEY (idrubro);
+
+
+--
+-- TOC entry 1944 (class 2606 OID 16444)
+-- Name: pk_solicitud; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY solicitud
+    ADD CONSTRAINT pk_solicitud PRIMARY KEY (idsolicitud);
+
+
+--
+-- TOC entry 1950 (class 2606 OID 16446)
+-- Name: pk_ubicacion; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY ubicacion
+    ADD CONSTRAINT pk_ubicacion PRIMARY KEY (idubicacion);
+
+
+--
+-- TOC entry 1954 (class 2606 OID 16448)
+-- Name: pk_usuario; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY usuario
+    ADD CONSTRAINT pk_usuario PRIMARY KEY (idusuario);
+
+
+--
+-- TOC entry 1922 (class 1259 OID 16449)
+-- Name: activo_pk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX activo_pk ON activo USING btree (idactivo);
+
+
+--
+-- TOC entry 1927 (class 1259 OID 16450)
+-- Name: catalogoactivosdanado_pk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX catalogoactivosdanado_pk ON catalogoactivosdanado USING btree (idcatalogdanado);
+
+
+--
+-- TOC entry 1939 (class 1259 OID 16451)
+-- Name: hacereferenciaa2_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX hacereferenciaa2_fk ON rubro USING btree (idactivo);
+
+
+--
+-- TOC entry 1923 (class 1259 OID 16452)
+-- Name: hacereferenciaa_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX hacereferenciaa_fk ON activo USING btree (idrubro);
+
+
+--
+-- TOC entry 1931 (class 1259 OID 16453)
+-- Name: historialreparacion_pk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX historialreparacion_pk ON historialreparacion USING btree (idhistorial);
+
+
+--
+-- TOC entry 1934 (class 1259 OID 16454)
+-- Name: puede_tener_1_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX puede_tener_1_fk ON historialreparacion USING btree (idsolicitud);
+
+
+--
+-- TOC entry 1930 (class 1259 OID 16455)
+-- Name: puede_tener_2_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX puede_tener_2_fk ON catalogoactivosdanado USING btree (idsolicitud);
+
+
+--
+-- TOC entry 1945 (class 1259 OID 16456)
+-- Name: puede_tener_3_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX puede_tener_3_fk ON solicitud USING btree (idbaja);
+
+
+--
+-- TOC entry 1937 (class 1259 OID 16457)
+-- Name: puede_tener_4_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX puede_tener_4_fk ON registrodeactivobaja USING btree (idsolicitud);
+
+
+--
+-- TOC entry 1946 (class 1259 OID 16458)
+-- Name: realiza_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX realiza_fk ON solicitud USING btree (idusuario);
+
+
+--
+-- TOC entry 1938 (class 1259 OID 16459)
+-- Name: registrodeactivobaja_pk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX registrodeactivobaja_pk ON registrodeactivobaja USING btree (idbaja);
+
+
+--
+-- TOC entry 1942 (class 1259 OID 16460)
+-- Name: rubro_pk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX rubro_pk ON rubro USING btree (idrubro);
+
+
+--
+-- TOC entry 1947 (class 1259 OID 16461)
+-- Name: sehaceuna_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX sehaceuna_fk ON solicitud USING btree (idactivo);
+
+
+--
+-- TOC entry 1948 (class 1259 OID 16462)
+-- Name: solicitud_pk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX solicitud_pk ON solicitud USING btree (idsolicitud);
+
+
+--
+-- TOC entry 1951 (class 1259 OID 16463)
+-- Name: tiene4_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX tiene4_fk ON ubicacion USING btree (idactivo);
+
+
+--
+-- TOC entry 1926 (class 1259 OID 16464)
+-- Name: tiene5_fk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX tiene5_fk ON activo USING btree (idubicacion);
+
+
+--
+-- TOC entry 1952 (class 1259 OID 16465)
+-- Name: ubicacion_pk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX ubicacion_pk ON ubicacion USING btree (idubicacion);
+
+
+--
+-- TOC entry 1955 (class 1259 OID 16466)
+-- Name: usuario_pk; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE UNIQUE INDEX usuario_pk ON usuario USING btree (idusuario);
+
+
+--
+-- TOC entry 1956 (class 2606 OID 16467)
+-- Name: fk_activo_hacerefer_rubro; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY activo
+    ADD CONSTRAINT fk_activo_hacerefer_rubro FOREIGN KEY (idrubro) REFERENCES rubro(idrubro) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1957 (class 2606 OID 16472)
+-- Name: fk_activo_tiene5_ubicacio; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY activo
+    ADD CONSTRAINT fk_activo_tiene5_ubicacio FOREIGN KEY (idubicacion) REFERENCES ubicacion(idubicacion) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1958 (class 2606 OID 16477)
+-- Name: fk_catalogo_puede_ten_solicitu; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY catalogoactivosdanado
+    ADD CONSTRAINT fk_catalogo_puede_ten_solicitu FOREIGN KEY (idsolicitud) REFERENCES solicitud(idsolicitud) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1959 (class 2606 OID 16482)
+-- Name: fk_historia_puede_ten_solicitu; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY historialreparacion
+    ADD CONSTRAINT fk_historia_puede_ten_solicitu FOREIGN KEY (idsolicitud) REFERENCES solicitud(idsolicitud) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1960 (class 2606 OID 16487)
+-- Name: fk_registro_puede_ten_solicitu; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY registrodeactivobaja
+    ADD CONSTRAINT fk_registro_puede_ten_solicitu FOREIGN KEY (idsolicitud) REFERENCES solicitud(idsolicitud) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1961 (class 2606 OID 16492)
+-- Name: fk_rubro_hacerefer_activo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY rubro
+    ADD CONSTRAINT fk_rubro_hacerefer_activo FOREIGN KEY (idactivo) REFERENCES activo(idactivo) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1962 (class 2606 OID 16497)
+-- Name: fk_solicitu_puede_ten_registro; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY solicitud
+    ADD CONSTRAINT fk_solicitu_puede_ten_registro FOREIGN KEY (idbaja) REFERENCES registrodeactivobaja(idbaja) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1963 (class 2606 OID 16502)
+-- Name: fk_solicitu_realiza_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY solicitud
+    ADD CONSTRAINT fk_solicitu_realiza_usuario FOREIGN KEY (idusuario) REFERENCES usuario(idusuario) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1964 (class 2606 OID 16507)
+-- Name: fk_solicitu_sehaceuna_activo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY solicitud
+    ADD CONSTRAINT fk_solicitu_sehaceuna_activo FOREIGN KEY (idactivo) REFERENCES activo(idactivo) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 1965 (class 2606 OID 16512)
+-- Name: fk_ubicacio_tiene4_activo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY ubicacion
+    ADD CONSTRAINT fk_ubicacio_tiene4_activo FOREIGN KEY (idactivo) REFERENCES activo(idactivo) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 2094 (class 0 OID 0)
+-- Dependencies: 6
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2015-09-19 23:35:55
+
+--
+-- PostgreSQL database dump complete
+--
+
